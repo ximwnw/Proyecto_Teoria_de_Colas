@@ -420,7 +420,7 @@ flake8 . --count --select=E9,F63,F7,F82
 
 ## Contacto y Contribuciones
 
-**Autor:** Edgar Rios (ximwnw)  
+**Autor:** Ximena Sánchez Sumano (ximwnw)  
 **Email:** ximenasumano11@gmail.com  
 **Repositorio:** https://github.com/ximwnw/Proyecto_Teoria_de_Colas
 
