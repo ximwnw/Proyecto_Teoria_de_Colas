@@ -1,0 +1,24 @@
+﻿# Windows
+AppData/
+*.log
+__pycache__/
+*.pyc
+.env
+.vscode/
+*.egg-info/
+dist/
+build/
+
+# IDE
+.idea/
+*.swp
+*.swo
+
+# Coverage
+htmlcov/
+.coverage
+coverage.xml
+
+# Virtual environment
+venv/
+env/

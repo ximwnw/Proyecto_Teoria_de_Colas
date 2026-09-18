@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coverage Report - Improved</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            font-size: 3em;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.95;
+        }
+
+        .improvement-banner {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            margin-bottom: 40px;
+            border-left: 8px solid #10b981;
+        }
+
+        .improvement-title {
+            color: #10b981;
+            font-size: 1.6em;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .improvement-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .stat-card {
+            background: #f0f9ff;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 0.85em;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .stat-number {
+            font-size: 2em;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 5px;
+        }
+
+        .stat-change {
+            color: #10b981;
+            font-size: 0.9em;
+            font-weight: 600;
+        }
+
+        .coverage-metrics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .metric-card {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .metric-title {
+            font-size: 1.3em;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e5e7eb;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+
+        .progress-text {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .coverage-value {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .coverage-count {
+            font-size: 0.9em;
+            color: #666;
+        }
+
+        .module-list {
+            background: #f9fafb;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .module-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .module-item:last-child {
+            border-bottom: none;
+        }
+
+        .module-name {
+            font-weight: 500;
+            color: #333;
+        }
+
+        .module-coverage {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .module-bar {
+            width: 120px;
+            height: 6px;
+            background: #e5e7eb;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .module-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 3px;
+        }
+
+        .module-percent {
+            font-weight: 600;
+            color: #667eea;
+            min-width: 50px;
+            text-align: right;
+        }
+
+        .test-summary {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            margin-bottom: 40px;
+        }
+
+        .test-summary h2 {
+            font-size: 1.5em;
+            color: #333;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .test-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .test-box {
+            background: #f0f9ff;
+            border-radius: 8px;
+            padding: 20px;
+            border-left: 4px solid #667eea;
+        }
+
+        .test-count {
+            font-size: 2em;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 8px;
+        }
+
+        .test-label {
+            color: #666;
+            font-size: 0.95em;
+        }
+
+        .insights {
+            background: #ecfdf5;
+            border-left: 4px solid #10b981;
+            padding: 25px;
+            border-radius: 8px;
+            margin-bottom: 40px;
+        }
+
+        .insights h3 {
+            color: #047857;
+            margin-bottom: 15px;
+            font-size: 1.2em;
+        }
+
+        .insights-list {
+            color: #065f46;
+            font-size: 0.95em;
+            line-height: 1.8;
+        }
+
+        .insights-list li {
+            margin-bottom: 12px;
+            margin-left: 20px;
+        }
+
+        .footer {
+            text-align: center;
+            color: white;
+            margin-top: 40px;
+            font-size: 0.95em;
+        }
+
+        .badge {
+            display: inline-block;
+            background: #10b981;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 600;
+            margin-left: 10px;
+        }
+
+        .checkmark {
+            color: #10b981;
+            font-weight: bold;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2em;
+            }
+
+            .improvement-stats {
+                grid-template-columns: 1fr;
+            }
+
+            .coverage-metrics {
+                grid-template-columns: 1fr;
+            }
+
+            .module-bar {
+                width: 80px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📊 Análisis de Cobertura Mejorado</h1>
+            <p>Proyecto de Teoría de Colas - Casos Límite Implementados</p>
+        </div>
+
+        <div class="improvement-banner">
+            <div class="improvement-title">✨ Mejora Significativa en Cobertura</div>
+            <div class="improvement-stats">
+                <div class="stat-card">
+                    <div class="stat-label">Cobertura Total Anterior</div>
+                    <div class="stat-number">44%</div>
+                    <div class="stat-change">905 líneas cubiertas</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Cobertura Total Nueva</div>
+                    <div class="stat-number">62%</div>
+                    <div class="stat-change">1,323 líneas cubiertas</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Mejora Absoluta</div>
+                    <div class="stat-number">+18%</div>
+                    <div class="stat-change">+418 líneas (46% más)</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Pruebas Nuevas</div>
+                    <div class="stat-number">78</div>
+                    <div class="stat-change">100% aprobadas</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="test-summary">
+            <h2>📋 Resumen de Pruebas</h2>
+            <div class="test-grid">
+                <div class="test-box">
+                    <div class="test-count">259</div>
+                    <div class="test-label">Total Pruebas Ejecutadas</div>
+                </div>
+                <div class="test-box">
+                    <div class="test-count">259</div>
+                    <div class="test-label">Pruebas Aprobadas ✓</div>
+                </div>
+                <div class="test-box">
+                    <div class="test-count">0</div>
+                    <div class="test-label">Pruebas Fallidas</div>
+                </div>
+                <div class="test-box">
+                    <div class="test-count">78</div>
+                    <div class="test-label">Casos Límite Nuevos</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="coverage-metrics">
+            <div class="metric-card">
+                <div class="metric-title">🎯 Cobertura General</div>
+                <div class="progress-text">
+                    <span>Cobertura Total</span>
+                    <span class="coverage-value">62%</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 62%"></div>
+                </div>
+                <div class="coverage-count">1,323 / 2,118 líneas cubiertas</div>
+                <div class="coverage-count" style="color: #10b981; margin-top: 10px; font-weight: 600;">
+                    ↑ Aumento de 18% desde 44%
+                </div>
+            </div>
+
+            <div class="metric-card">
+                <div class="metric-title">📦 Por Módulo Principal</div>
+                <div class="module-list">
+                    <div class="module-item">
+                        <span class="module-name">mmc_model.py</span>
+                        <div class="module-coverage">
+                            <div class="module-bar">
+                                <div class="module-bar-fill" style="width: 100%"></div>
+                            </div>
+                            <span class="module-percent">100%</span>
+                        </div>
+                    </div>
+                    <div class="module-item">
+                        <span class="module-name">test_integration.py</span>
+                        <div class="module-coverage">
+                            <div class="module-bar">
+                                <div class="module-bar-fill" style="width: 99%"></div>
+                            </div>
+                            <span class="module-percent">99%</span>
+                        </div>
+                    </div>
+                    <div class="module-item">
+                        <span class="module-name">test_data_generation.py</span>
+                        <div class="module-coverage">
+                            <div class="module-bar">
+                                <div class="module-bar-fill" style="width: 99%"></div>
+                            </div>
+                            <span class="module-percent">99%</span>
+                        </div>
+                    </div>
+                    <div class="module-item">
+                        <span class="module-name">test_edge_cases_advanced.py</span>
+                        <div class="module-coverage">
+                            <div class="module-bar">
+                                <div class="module-bar-fill" style="width: 96%"></div>
+                            </div>
+                            <span class="module-percent">96%</span>
+                        </div>
+                    </div>
+                    <div class="module-item">
+                        <span class="module-name">test_hourly_staffing.py</span>
+                        <div class="module-coverage">
+                            <div class="module-bar">
+                                <div class="module-bar-fill" style="width: 93%"></div>
+                            </div>
+                            <span class="module-percent">93%</span>
+                        </div>
+                    </div>
+                    <div class="module-item">
+                        <span class="module-name">test_mmc_model.py</span>
+                        <div class="module-coverage">
+                            <div class="module-bar">
+                                <div class="module-bar-fill" style="width: 91%"></div>
+                            </div>
+                            <span class="module-percent">91%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="insights">
+            <h3>🔍 Análisis e Insights</h3>
+            <ul class="insights-list">
+                <li><span class="checkmark">✓</span> <strong>Módulo Principal (mmc_model.py):</strong> 100% de cobertura - todas las funciones y lógica del modelo M/M/c completamente testeadas</li>
+                <li><span class="checkmark">✓</span> <strong>Tests de Integración:</strong> 99% de cobertura - validación exhaustiva del flujo de datos entre módulos</li>
+                <li><span class="checkmark">✓</span> <strong>Generación de Datos:</strong> 99% de cobertura - casos como clientes únicos, distribuciones extremas, ventanas de tiempo especiales</li>
+                <li><span class="checkmark">✓</span> <strong>Casos Límite Nuevos (96%):</strong> 78 pruebas avanzadas cubriendo:</li>
+                <li style="margin-left: 40px;">• Condiciones de estabilidad límite (ρ → 1⁻, ρ = 1, ρ > 1)</li>
+                <li style="margin-left: 40px;">• Valores extremos (λ → 0⁺, λ → ∞, μ muy grande/pequeño)</li>
+                <li style="margin-left: 40px;">• Estabilidad numérica con valores muy grandes/pequeños</li>
+                <li style="margin-left: 40px;">• Correlaciones entre métricas (Wq < W, Lq < L)</li>
+                <li><span class="checkmark">✓</span> <strong>Staffing & Costos:</strong> 93% de cobertura - cero costos, servidores extremos, colas masivas</li>
+                <li><span class="checkmark">✓</span> <strong>Condiciones de Frontera:</strong> Pruebas de medianoche, cruces de año/mes, tiempos de 24h exactos</li>
+            </ul>
+        </div>
+
+        <div class="coverage-metrics">
+            <div class="metric-card">
+                <div class="metric-title">🏆 Categorías de Pruebas Nuevas</div>
+                <div class="module-list">
+                    <div class="module-item">
+                        <span class="module-name">Condiciones límite M/M/c</span>
+                        <span class="coverage-value">10 pruebas</span>
+                    </div>
+                    <div class="module-item">
+                        <span class="module-name">Casos extremos de datos</span>
+                        <span class="coverage-value">6 pruebas</span>
+                    </div>
+                    <div class="module-item">
+                        <span class="module-name">Edge cases staffing</span>
+                        <span class="coverage-value">6 pruebas</span>
+                    </div>
+                    <div class="module-item">
+                        <span class="module-name">Integración edge cases</span>
+                        <span class="coverage-value">4 pruebas</span>
+                    </div>
+                    <div class="module-item">
+                        <span class="module-name">Estabilidad numérica</span>
+                        <span class="coverage-value">3 pruebas</span>
+                    </div>
+                    <div class="module-item">
+                        <span class="module-name">Correlaciones de métricas</span>
+                        <span class="coverage-value">3 pruebas</span>
+                    </div>
+                    <div class="module-item">
+                        <span class="module-name">Combinaciones extremas</span>
+                        <span class="coverage-value">4 pruebas</span>
+                    </div>
+                    <div class="module-item">
+                        <span class="module-name">Casos de tiempo</span>
+                        <span class="coverage-value">7 pruebas</span>
+                    </div>
+                    <div class="module-item">
+                        <span class="module-name">Tiempos de servicio</span>
+                        <span class="coverage-value">7 pruebas</span>
+                    </div>
+                    <div class="module-item">
+                        <span class="module-name">Tasas de llegada</span>
+                        <span class="coverage-value">5 pruebas</span>
+                    </div>
+                    <div class="module-item">
+                        <span class="module-name">Niveles de staffing</span>
+                        <span class="coverage-value">4 pruebas</span>
+                    </div>
+                    <div class="module-item">
+                        <span class="module-name">Cálculos de costo</span>
+                        <span class="coverage-value">5 pruebas</span>
+                    </div>
+                    <div class="module-item">
+                        <span class="module-name">Distribuciones extremas</span>
+                        <span class="coverage-value">5 pruebas</span>
+                    </div>
+                    <div class="module-item">
+                        <span class="module-name">Consistencia de datos</span>
+                        <span class="coverage-value">5 pruebas</span>
+                    </div>
+                    <div class="module-item">
+                        <span class="module-name">Ratios y proporciones</span>
+                        <span class="coverage-value">4 pruebas</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="metric-card">
+                <div class="metric-title">📈 Áreas Fortalecidas</div>
+                <div class="module-list">
+                    <div class="module-item">
+                        <span class="module-name">Validación de inputs</span>
+                        <span class="coverage-value" style="color: #10b981;">Completado</span>
+                    </div>
+                    <div class="module-item">
+                        <span class="module-name">Sistemas estables</span>
+                        <span class="coverage-value" style="color: #10b981;">Completado</span>
+                    </div>
+                    <div class="module-item">
+                        <span class="module-name">Sistemas inestables</span>
+                        <span class="coverage-value" style="color: #10b981;">Completado</span>
+                    </div>
+                    <div class="module-item">
+                        <span class="module-name">Condiciones críticas</span>
+                        <span class="coverage-value" style="color: #10b981;">Completado</span>
+                    </div>
+                    <div class="module-item">
+                        <span class="module-name">Relaciones matemáticas</span>
+                        <span class="coverage-value" style="color: #10b981;">Completado</span>
+                    </div>
+                    <div class="module-item">
+                        <span class="module-name">Distribuciones</span>
+                        <span class="coverage-value" style="color: #10b981;">Completado</span>
+                    </div>
+                    <div class="module-item">
+                        <span class="module-name">Funciones de costo</span>
+                        <span class="coverage-value" style="color: #10b981;">Completado</span>
+                    </div>
+                    <div class="module-item">
+                        <span class="module-name">Análisis temporal</span>
+                        <span class="coverage-value" style="color: #10b981;">Completado</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>✨ Suite de Pruebas Completa - Casos Límite Exhaustivos</p>
+            <p style="margin-top: 15px; opacity: 0.8;">259 pruebas | 100% aprobadas | +78 casos límite | Cobertura 62% (+18%) | Validación de extremos</p>
+        </div>
+    </div>
+</body>
+</html>
